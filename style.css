@@ -102,3 +102,18 @@ body{
     margin-top:10px;
     display: none;
 }
+
+@media (max-width: 768px) {
+    .card {
+        padding: 30px;
+    }
+    .weather h1 {
+        font-size: 60px;
+    }
+    .weather h2 {
+        font-size: 30px;
+    }
+    .weather-icon {
+        width: 120px;
+    }
+}
