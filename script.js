@@ -1,77 +1,53 @@
 
+const apiKey="00aba5358c10cdc594a8cfc163b176d2";
+const apiUrl="https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
 
-//For New Game Button....
-let newGame=document.querySelector(".newgame");
+const searchBox=document.querySelector(".search input");
+const searchBtn=document.querySelector(".search button");
+const weatherIcon=document.querySelector(".weather-icon")
 
-newGame.addEventListener("click",()=>{
-    alert("New Game is Starting");
-    location.reload();
-})
+async function checkWeather(city){
+    const response=await fetch(apiUrl+city+`&appid=${apiKey}`);
 
-////////////////////////////////////////////////////////////////////////////////////////
-//Random Variable 
-function getRandomValue() {
-    return ( Math.floor(Math.random() * 3)); // Generates a random integer between 0 and 2
+    if(response.status==404){
+        document.querySelector(".error").style.display="block";
+        document.querySelector(".weather").style.display="none";
+    }
+    else{
+        var data=await response.json();
+
+        console.log(data);
+        document.querySelector(".city").innerHTML=data.name;
+        document.querySelector(".temp").innerHTML=Math.round(data.main.temp) + "°C";
+        document.querySelector(".humidity").innerHTML=data.main.humidity +"%";
+        document.querySelector(".wind").innerHTML=data.wind.speed +"km/hr";
+
+        if(data.weather[0].main=="Clouds"){
+            weatherIcon.src="images/clouds.png"
+        }
+        else if(data.weather[0].main=="Clear"){
+            weatherIcon.src="images/clear.png"
+        }
+        else if(data.weather[0].main=="Rain"){
+            weatherIcon.src="images/rain.png"
+        }
+        else if(data.weather[0].main=="Drizzle"){
+            weatherIcon.src="images/drizzle.png"
+        }
+        else if(data.weather[0].main=="Mist"){
+            weatherIcon.src="images/mist.png"
+        }
+        else if(data.weather[0].main=="Snow"){
+            weatherIcon.src="images/snow.png"
+        }
+        else if(data.weather[0].main=="Haze"){
+            weatherIcon.src="images/haze.png"
+        }
+        document.querySelector(".weather").style.display="block";
+        document.querySelector(".error").style.display="none";
+    }
 }
+searchBtn.addEventListener("click",()=>{
+    checkWeather(searchBox.value);
+});
 
-////////////////////////////////////////////////////////////////////////////////////////
-//at 0 index means rock will loses to 1 means paper.....and same goes on
-let arr=[1,2,0];
-
-let options=document.querySelectorAll(".icons img");
-let myScore=document.querySelector("#yourscore h1");
-let botScore=document.querySelector("#pcscore h1");
-let total=document.querySelector("#totalscore h1");
-let botImage=document.querySelector("#choice img");
-let result=document.querySelector(".result");
-let resultText=document.querySelector(".result h2");
-
-options.forEach((option)=>{
-    option.addEventListener("click", ()=>{
-        
-        botImage.style.visibility="visible";
-        let bot=getRandomValue();
-        if(bot===0){
-            botImage.src="images/rock.png";
-            
-        }
-        else if(bot===1){
-            botImage.src="images/paper.png";
-        }
-        else {
-            botImage.src="images/scissor.png";
-        }
-        console.log(bot);
-        let myoption =parseInt(option.alt,10);
-        result.style.visibility="visible";
-        if(bot===myoption) {
-            console.log("Draw");
-            result.style.backgroundColor="#000";
-            resultText.style.color="rgb(237, 237, 237)";
-            resultText.innerText="Draw";
-            
-        }
-        else if(arr[myoption]===bot) {
-            console.log("Bot wins");
-
-            botScore.textContent = `${parseInt(botScore.textContent, 10)+1}`;
-            total.textContent = `${parseInt(total.textContent, 10)+1}`;
-
-            result.style.backgroundColor="#f74b4b";
-            resultText.style.color="#000";
-            resultText.innerText="Lose";
-        }
-        else {
-            console.log("You won");
-            myScore.textContent=`${parseInt(myScore.textContent,10)+1}`;
-            total.textContent = `${parseInt(total.textContent, 10)+1}`;
-
-            result.style.backgroundColor="#5faf94";
-            resultText.style.color="#000";
-            resultText.innerText="Won";
-        }
-        
-        
-        
-    })
-})
