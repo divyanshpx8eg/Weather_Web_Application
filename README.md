@@ -1,6 +1,4 @@
-# Project Title
-
-Weather App
+# Weather Web Application
 
 ## Description
 
